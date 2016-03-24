@@ -3,8 +3,6 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
 
-    public float playerSpeed;   // tốc độ ban đầu
-    public float acceleration;  // gia tốc
     Animator anim;
     Rigidbody rigid;
 
@@ -16,21 +14,43 @@ public class PlayerScript : MonoBehaviour {
 
     void Update()
     {
-        AutoMove();
         if (Input.GetButtonDown("Fire1"))
         {
-            rigid.AddForce(0, 500, 0);
+            rigid.AddForce(0, 250, 0);
+            anim.SetTrigger("jump");
         }
-    }
 
-    void AutoMove()
-    {
-        playerSpeed = playerSpeed * acceleration;
-        transform.Translate(0, 0, playerSpeed * Time.deltaTime);
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Debug.Log("StartGame");
+            anim.SetTrigger("run");
+        }
+
+        if (Input.GetButtonDown("Fire3"))
+        {
+            Debug.Log("Tang toc do");
+            Move.Instance.IncreaseAcceleration();
+        }
+
+        if (Input.GetButtonDown("Fire2"))
+        {
+            Debug.Log("Truot");
+            Move.Instance.IncreaseAcceleration();
+        }
     }
 
     void Jump()
     {
 
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Trap")
+        {
+            Debug.Log("Cham vao chuong ngai vat");
+            anim.SetTrigger("crack");
+            Move.Instance.isMove = false;
+        }
     }
 }
